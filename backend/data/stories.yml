@@ -1,0 +1,506 @@
+version: "3.0"
+
+stories:
+ 
+ # Welcome 
+ #This is welcome story that demonstrate the conversation path starts from the user greeting, the user will send its name and will be saved on stu_name slot and entities,
+ #  the chatbot will greet the student back then the chatbot will ask if the user wants to requist a form or send inquiry
+  - story: welcome
+    steps:
+      - intent: greet
+      - action: stu_name_form
+      - active_loop: stu_name_form
+      - slot_was_set:
+        - requested_slot: stu_name
+      - slot_was_set:
+        - stu_name: أمل
+      - slot_was_set:
+        - requested_slot: null
+      - active_loop: null 
+      - action: utter_submit
+      - action: utter_slots_values
+
+# Conversation path that activates the form_num_form after the student selects "طلب نموذج" and saves the form number in form_num slot 
+#to pring the requisted form then clear the slot using "action_reset_form_num"
+  - story: request form
+    steps:
+      - intent: select_form
+      - action: utter_select_form
+      - action: form_num_form 
+      - active_loop: form_num_form
+      - slot_was_set:
+        - requested_slot: form_num
+      - slot_was_set:
+        - form_num: "4"
+      - slot_was_set:
+        - requested_slot: null
+      - active_loop: null 
+      - action: action_reset_form_num
+      - action: utter_yes_satisfactory
+
+# Conversation path shows if the student selects inquiry the chatbot will respond with corresponding action
+  - story: inquire
+    steps:
+      - intent: select_inquiry
+      - action: utter_select_inquiry
+
+  - story: thanks
+    steps:
+      - intent: thanks
+      - action: utter_thanks
+
+# Conversation path if the student was not satisfaied with the response
+  - story: path_notSatisfactory
+    steps:
+      - intent: notSatistactory
+      - action: utter_not_satisfactory
+
+# Conversation path if the student was satisfaied with the response
+  - story: path_yesSatisfactory
+    steps:
+      - intent: yesSatistactory
+      - action: utter_yes_satisfactory
+
+ # fallback & out of scope
+ # a defining conversation path when user selects rephrase option
+  - story: rephrase_option
+    steps:
+      - intent: rephraseـoption
+      - action: utter_rephrase_option
+# a story for any out-of-scope inquiries the chatbot could face
+  - story: handel out of scope inquiries
+    steps:
+      - intent: out_of_scope
+      - action: utter_out_of_scope
+  
+ # Forward
+ # A conversation path for email forwarding consist of multiple actions
+  - story: email_generate
+    steps:
+      - intent: forwared 
+      - action: id_form # first action is to activate id form and collect the student id
+      - active_loop: id_form
+      - slot_was_set:
+        - requested_slot: id_stu
+      - slot_was_set:
+        - id_stu: "439200842"
+      - slot_was_set:
+        - requested_slot: null
+      - active_loop: null 
+      - action: dep_form # secend action is to activate department form and collect department
+      - active_loop: dep_form
+      - slot_was_set:
+        - requested_slot: dep_advisor
+      - slot_was_set:
+        - dep_advisor: نظم معلومات
+      - slot_was_set:
+        - requested_slot: null
+      - active_loop: null
+      - action: advisor_name_form # third action is to activate the advisor name form and collect advisor name
+      - active_loop: advisor_name_form
+      - slot_was_set:
+        - requested_slot: advisor_name
+      - slot_was_set:
+        - advisor_name: ا. ريم الربيعة
+      - slot_was_set:
+        - requested_slot: null
+      - active_loop: null 
+      - action: inquiry_form # forth action is to activate the inquiry form  and collect the inquiry
+      - active_loop: inquiry_form
+      - slot_was_set:
+        - requested_slot: inquiry
+      - slot_was_set:
+        - inquiry: كيف استطيع استلام وثيقتي
+      - slot_was_set:
+        - requested_slot: null
+      - active_loop: null 
+      - action: utter_slots_forward_inquiry_values # last action is to show the student all collected information
+      
+# After showing the information the chatbot will ask the user to confirm these information either
+# By rejecting
+  - story: don't forward
+    steps:
+      - intent: dontForward
+      - action: action_forward_slots_reset # reseting the valuse to none
+      - action: utter_dontForward
+# Or by accepting
+  - story: yes forward
+    steps:
+      - intent: yesForward
+      - action: action_email
+      - action: action_forward_slots_reset # reseting the valuse to none
+
+ # Others
+  - story: gp requirments inquiry
+    steps:
+      - intent: gp_requirments
+      - action: utter_gp_requirments
+      - action: utter_was_satisfactory # On all the trained academic  inquiries, we add this action 
+#so, when the chatbot response it will ask if the response was satisfactory or not
+
+  - story: gp ideas inquiry
+    steps:
+      - intent: gp_idea
+      - action: utter_gp_idea
+      - action: utter_was_satisfactory
+
+  - story: gp ideas inquiry
+    steps:
+      - intent: gp_idea
+      - action: utter_gp_idea
+      - action: utter_was_satisfactory
+
+  - story: gp regulations inquiry
+    steps:
+      - intent: gp_regulations
+      - action: utter_gp_regulations
+      - action: utter_was_satisfactory
+
+  - story: gp mail inquiry
+    steps:
+      - intent: gp_mail
+      - action: utter_gp_mail
+      - action: utter_was_satisfactory
+
+  - story: answer hours_1
+    steps:
+      - intent: hours_1
+      - action: utter_hours_1
+      - action: utter_was_satisfactory
+
+  - story: answer hours_2
+    steps:
+      - intent: hours_2
+      - action: utter_hours_2
+      - action: utter_was_satisfactory
+
+  - story: answer schedule_1
+    steps:
+      - intent: schedule_1
+      - action: utter_schedule_1
+      - action: utter_was_satisfactory
+
+  - story: answer schedule_2
+    steps:
+      - intent: schedule_2
+      - action: utter_schedule_2
+      - action: utter_was_satisfactory
+
+  - story: answer schedule_3
+    steps:
+      - intent: schedule_3
+      - action: utter_schedule_3
+      - action: utter_was_satisfactory
+
+  - story: answer schedule_5
+    steps:
+      - intent: schedule_5
+      - action: utter_schedule_5
+      - action: utter_was_satisfactory
+
+  - story: answer schedule_7
+    steps:
+      - intent: schedule_7
+      - action: utter_schedule_7
+      - action: utter_was_satisfactory
+
+  - story: answer schedule_8
+    steps:
+      - intent: schedule_8
+      - action: utter_schedule_8
+      - action: utter_was_satisfactory
+
+  - story: answer schedule_9
+    steps:
+      - intent: schedule_9
+      - action: utter_schedule_9
+      - action: utter_was_satisfactory
+
+  - story: answer postponding
+    steps:
+      - intent: postponding
+      - action: utter_postponding
+      - action: utter_was_satisfactory
+
+  - story: answer stepsOfPostponding
+    steps:
+      - intent: stepsOfPostponding
+      - action: utter_stepsOfPostponding
+      - action: utter_was_satisfactory
+
+  - story: answer RewardPostponding
+    steps:
+      - intent: RewardPostponding
+      - action: utter_RewardPostponding
+      - action: utter_was_satisfactory
+
+  - story: answer dropingSemester
+    steps:
+      - intent: dropingSemester
+      - action: utter_dropingSemester
+      - action: utter_was_satisfactory
+
+  - story: answer IsThereDropingSemesterConditions
+    steps:
+      - intent: IsThereDropingSemesterConditions
+      - action: utter_IsThereDropingSemesterConditions
+      - action: utter_was_satisfactory
+
+  - story: answer CountingDropSummer
+    steps:
+      - intent: CountingDropSummer
+      - action: utter_CountingDropSummer
+      - action: utter_was_satisfactory
+
+  - story: answer stepsDropingSemmester
+    steps:
+      - intent: stepsDropingSemmester
+      - action: utter_stepsDropingSemmester
+      - action: utter_was_satisfactory
+
+  - story: answer DropingSemmesterHonorsDegree
+    steps:
+      - intent: DropingSemmesterHonorsDegree
+      - action: utter_DropingSemmesterHonorsDegree
+      - action: utter_was_satisfactory
+
+  - story: answer DropingOrPostpending
+    steps:
+      - intent: DropingOrPostpending
+      - action: utter_DropingOrPostpending
+      - action: utter_was_satisfactory
+
+  - story: answer DropingOneCourse
+    steps:
+      - intent: DropingOneCourse
+      - action: utter_DropingOneCourse
+      - action: utter_was_satisfactory
+
+  - story: answer ConditionsDropingCourse
+    steps:
+      - intent: ConditionsDropingCourse
+      - action: utter_ConditionsDropingCourse
+      - action: utter_was_satisfactory
+
+  - story: answer stepsDropingCourse
+    steps:
+      - intent: stepsDropingCourse
+      - action: utter_stepsDropingCourse
+      - action: utter_was_satisfactory
+
+  - story: answer DropMoreThanOneCourse
+    steps:
+      - intent: DropMoreThanOneCourse
+      - action: utter_DropMoreThanOneCourse
+      - action: utter_was_satisfactory
+
+  - story: answer differentLectureTutorial
+    steps:
+      - intent: differentLectureTutorial
+      - action: utter_differentLectureTutorial
+      - action: utter_was_satisfactory
+
+  - story: answer changeGroubProsedure
+    steps:
+      - intent: changeGroubProsedure
+      - action: utter_changeGroubProsedure
+      - action: utter_was_satisfactory
+
+  - story: answer deleteCoRequisiteCourse
+    steps:
+      - intent: deleteCoRequisiteCourse
+      - action: utter_deleteCoRequisiteCourse
+      - action: utter_was_satisfactory
+
+  - story: answer maximumRegisterHours
+    steps:
+      - intent: maximumRegisterHours
+      - action: utter_maximumRegisterHours
+      - action: utter_was_satisfactory
+
+  - story: answer maximumRegisterHoursSummer
+    steps:
+      - intent: maximumRegisterHoursSummer
+      - action: utter_maximumRegisterHoursSummer
+      - action: utter_was_satisfactory
+
+  - story: answer AllowableNumberOfDrops
+    steps:
+      - intent: AllowableNumberOfDrops
+      - action: utter_AllowableNumberOfDrops
+      - action: utter_was_satisfactory
+
+  - story: ask about labANDt-section
+    steps:
+      - intent: labANDt-section
+      - action: utter_labANDt-section
+      - action: utter_was_satisfactory
+
+  - story: ask about closed-Section
+    steps:
+      - intent: closed-Section
+      - action: utter_closed-Section
+      - action: utter_was_satisfactory
+
+  - story: ask about transfer
+    steps:
+      - intent: transfer
+      - action: utter_transfer
+      - action: utter_was_satisfactory
+
+  - story: ask about transfer-terms
+    steps:
+      - intent: transfer-terms
+      - action: utter_transfer-terms
+      - action: utter_was_satisfactory
+
+  - story: ask about transfer-dates
+    steps:
+      - intent: transfer-dates
+      - action: utter_transfer-dates
+      - action: utter_was_satisfactory
+
+  - story: ask about Re-test
+    steps:
+      - intent: Re-test
+      - action: utter_Re-test
+      - action: utter_was_satisfactory
+
+  - story: ask about skip-test
+    steps:
+      - intent: skip-test
+      - action: utter_skip-test
+      - action: utter_was_satisfactory
+
+  - story: ask about Course-equation
+    steps:
+      - intent: Course-equation
+      - action: utter_Course-equation
+      - action: utter_was_satisfactory
+
+  - story: ask about request-course
+    steps:
+      - intent: request-course
+      - action: utter_request-course
+      - action: utter_was_satisfactory
+
+  - story: ask about academic-warning
+    steps:
+      - intent: academic-warning
+      - action: utter_academic-warning
+      - action: utter_was_satisfactory
+
+  - story: ask about academic-transcript
+    steps:
+      - intent: academic-transcript
+      - action: utter_academic-transcript
+      - action: utter_was_satisfactory
+
+  - story: ask about honors
+    steps:
+      - intent: honors
+      - action: utter_honors
+      - action: utter_was_satisfactory
+
+  - story: answer addCourse
+    steps:
+      - intent: addCourse
+      - action: utter_addCourse
+      - action: utter_was_satisfactory
+
+  - story: answer deleteCourse
+    steps:
+      - intent: deleteCourse
+      - action: utter_deleteCourse
+      - action: utter_was_satisfactory
+
+  - story: answer stepsAddDelete
+    steps:
+      - intent: stepsAddDelete
+      - action: utter_stepsAddDelete
+      - action: utter_was_satisfactory
+
+  - story: answer studentSchedule
+    steps:
+      - intent: studentSchedule
+      - action: utter_studentSchedule
+      - action: utter_was_satisfactory
+
+  - story: answer nextSemesterCourses
+    steps:
+      - intent: nextSemesterCourses
+      - action: utter_nextSemesterCourses
+      - action: utter_was_satisfactory
+
+  - story: answer zeroCourse
+    steps:
+      - intent: zeroCourse
+      - action: utter_zeroCourse
+      - action: utter_was_satisfactory
+
+  - story: answer absence
+    steps:
+      - intent: absence
+      - action: utter_absence
+      - action: utter_was_satisfactory
+
+  - story: answer dropingSemester_form
+    steps:
+      - intent: dropingSemester_form
+      - action: utter_dropingSemester_form
+      - action: utter_was_satisfactory
+
+  - story: answer DropzeroCourse
+    steps:
+      - intent: DropzeroCourse
+      - action: utter_DropzeroCourse
+      - action: utter_was_satisfactory
+
+  - story: answer studentPlan
+    steps:
+      - intent: studentPlan
+      - action: utter_studentPlan
+
+  - story: answer studentPlanIS 
+    steps:
+      - intent: studentPlanIS
+      - action: utter_studentPlanIS
+      - action: utter_was_satisfactory
+
+  - story: answer studentPlanCS
+    steps:
+      - intent: studentPlanCS
+      - action: utter_studentPlanCS
+      - action: utter_was_satisfactory
+
+  - story: answer studentPlanSE
+    steps:
+      - intent: studentPlanSE
+      - action: utter_studentPlanSE
+      - action: utter_was_satisfactory
+
+  - story: answer studentPlanIT
+    steps:
+      - intent: studentPlanIT
+      - action: utter_studentPlanIT
+      - action: utter_was_satisfactory
+
+  - story: answer studentPlanIT_CyberSecurity
+    steps:
+      - intent: studentPlanIT_CyberSecurity
+      - action: utter_studentPlanIT_CyberSecurity
+      - action: utter_was_satisfactory
+
+  - story: answer studentPlanIT_DataScienceAndAI
+    steps:
+      - intent: studentPlanIT_DataScienceAndAI
+      - action: utter_studentPlanIT_DataScienceAndAI
+      - action: utter_was_satisfactory
+
+  - story: answer studentPlanIT_NetworksAndIoTEngineering
+    steps:
+      - intent: studentPlanIT_NetworksAndIoTEngineering
+      - action: utter_studentPlanIT_NetworksAndIoTEngineering
+      - action: utter_was_satisfactory
+
+

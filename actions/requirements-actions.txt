@@ -1,5 +1,6 @@
+rasa
 pandas
-smtplib
-email
-sqlite3
+#smtplib
+#email
+#sqlite3
 sqlalchemy

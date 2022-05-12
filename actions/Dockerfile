@@ -7,8 +7,8 @@ COPY ./requirements-actions.txt ./
 #copy everything in ./actions directory (your custom actions code) to /app/actions in container
 # COPY ./ /app/actions
 COPY actions.py /app
-COPY stanzatokenizer.py /app
-COPY dbQueries.py /app
+# COPY stanzatokenizer.py /app
+# COPY dbQueries.py /app
 COPY advisors.db /app
 #install dependencies inside Docker container
 USER root 
